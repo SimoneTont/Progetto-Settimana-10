@@ -3,11 +3,22 @@ import { useNavigate, useParams } from 'react-router-dom'
 import axios from 'axios'
 import { Link } from 'react-router-dom';
 import { Container, Dropdown, InputGroup, Form, Button } from 'react-bootstrap';
-
+//https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={API key} Meteo
+//http://api.openweathermap.org/geo/1.0/direct?q={city name},{state code},{country code}&limit={limit}&appid={API key} Coordinate
 export default function Home() {
+  const [value, setValue] = useState("");
+  const [location, setLocation] = useState([]);
+  useEffect(() => {  
+    fetch(`http://api.openweathermap.org/geo/1.0/direct?q=${value}&limit=1&appid=0e06fceaa8a8b4260c4e59126edc2d37`)
+    .then(response => response.json())
+    .then(json => console.log(json))
+    .catch(err => console.error(err))
+}, [value])  
+
+//console.log(location)
   return (
     <Container>
-      <Dropdown>
+      {/* <Dropdown>
         <Dropdown.Toggle className="my-3" variant="primary" id="dropdown-basic">
           Regione
         </Dropdown.Toggle>
@@ -33,17 +44,18 @@ export default function Home() {
           <Dropdown.Item ><Link className='nav-link' to="/previsioni">Val d'Aosta</Link></Dropdown.Item>
           <Dropdown.Item ><Link className='nav-link' to="/previsioni">Veneto</Link></Dropdown.Item>
         </Dropdown.Menu>
-      </Dropdown>
+      </Dropdown> */}
       <Container className='d-flex justify-content-center'>
       <InputGroup className="mb-3">
-        <InputGroup.Text id="basic-addon1">Inserisci la località</InputGroup.Text>
+        <InputGroup.Text type='text' id="basic-addon1">Inserisci la località</InputGroup.Text>
         <Form.Control
           placeholder="Località"
           aria-label="CercaLocalita"
           aria-describedby="basic-addon1"
+          onChange={(input) => setValue(input.target.value)}
         />
       </InputGroup>
-      <Button variant="success mx-3">Conferma</Button>
+      <Button variant="success mx-3" type='submit' onClick={() => alert(value)}>Conferma</Button>
       </Container>
     </Container>
   )
